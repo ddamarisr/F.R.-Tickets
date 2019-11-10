@@ -7,6 +7,7 @@ package ui;
 
 import businessLogic.Administrator;
 import businessLogic.User;
+import customImplementations.Node;
 import data.Flight;
 import data.Passenger;
 import data.Route;
@@ -256,7 +257,7 @@ public class UI {
         System.out.println("1-------- Cancelar Vuelo");
         System.out.println("2-------- Modificar Información del Vuelo");
         System.out.println("3---------Ver lista de pasajeros");
-        System.out.println("4---------Comprobar acomodación");
+        System.out.println("4---------Consultar acomodación");
         System.out.println("5-------- Volver a buscar");
         System.out.println("6-------- Regresar al menú");
 
@@ -321,14 +322,15 @@ public class UI {
     }
     
     public static void UserMenu(User user,Administrator admin) throws IOException, ParseException{
-        
+        System.out.println("");
         System.out.println("Bienvenido al sistema de reservas de vuelos.");
         System.out.println("Por favor ingrese el numero correspondiente a la opción que desea llevar a cabo: "+ "\n");
-
-        System.out.println("1-------- Iniciar Reservación"); // Vamos a eliminar y añadir datos. No queda de otra que usar listas enlazadas para los vuelos
-        System.out.println("2-------- Salir");
+        System.out.println("1-------- Iniciar Reservación"); 
+        System.out.println("2-------- Buscar Reservación");//busqueda en avl
+        System.out.println("3-------- Salir");
         
-        int opcion = verification(2);
+        
+        int opcion = verification(3);
         
         switch (opcion) {
             case 1:
@@ -336,15 +338,87 @@ public class UI {
                 break;
                         
             case 2:
+                UI.userFindreservation(user, admin);
+             
                 /*WriteAndRead.writeFlights();
                 WriteAndRead.writeDestinations();
                 for(Flight i: flights){
                 WriteAndRead.writePassengers(i);
                 } */               
+                break;
+            case 3:
+                WriteAndRead.writeFlights(admin);
                 System.exit(0);
                 break;
             default:
                 break;
+        }
+    }
+    
+    public static void userUpdatereservations(User user, Administrator defo, Passenger p) throws IOException, ParseException {
+        System.out.println("Por favor ingrese el numero correspondiente a la opción que desea llevar a cabo: " + "\n");
+        System.out.println("1-------- Cambiar asiento");
+        System.out.println("2-------- Cancelar reservación");
+        System.out.println("3-------- Modificar datos personales");
+        System.out.println("4-------- Regresar al menú principal");
+
+        int opcion = verification(4);
+
+        switch (opcion) {
+            case 1:
+                user.changeSeats(p);
+                break;
+            case 2:
+                user.deleteReservation(defo, p);
+                break;
+            case 3:
+                break;
+            case 4:
+                UI.UserMenu(user, defo);
+                break;
+
+            default:
+                break;
+
+        }
+        
+        System.out.println("Su cambio ha sido guardado exitosamente. Presione 1 para avanzar al menu");
+        UI.verification(1);
+        UI.UserMenu(user, defo);
+    }
+    
+    public static void userFindreservation(User user, Administrator defo) throws IOException, ParseException {
+        System.out.println("");
+        System.out.println("Bienvenido al sistema de búsqueda de reservaciones");
+
+        String id = UI.recorder("el número de la reserva (documento del pasajero): ");
+
+        user.findReservations(defo, id);
+
+        Passenger found = user.findReservations(defo, id);
+
+        if (found == null) {
+            System.out.println("La reserva NO fue encontrada");
+            System.out.print("Presione 1 para reintentar la busqueda o presione 2 para volver al menú de usuario: ");
+
+            int opcion = verification(3);
+
+            switch (opcion) {
+                case 1:
+                    UI.userFindreservation(user, defo);
+                    break;
+
+                case 2:
+                    UI.UserMenu(user, defo);
+                    break;
+                default:
+                    break;
+
+            }
+
+        } else {
+            System.out.println("Su reserva ha sido encontrada: " + found);
+            UI.userUpdatereservations(user, defo, found);
         }
     }
     
@@ -386,24 +460,26 @@ public class UI {
             i++;
         }
 
-        System.out.println("Indique el número correspondiente la opción que"+""
+        System.out.print("Indique el número correspondiente la opción que"+""
                 + "desea reservar\n");
         
         key = verification(posFlights.size());
         
-        Passenger added=posFlights.get(key-1).addPassenger();
+        Passenger added=posFlights.get(key-1).addPassenger(defo);
         
         System.out.println("RESERVA EXITOSA");
         System.out.println("Recuerde que su número de reserva es: "+added.getId());
-        WriteAndRead.writeFlights(defo);
-        System.exit(0);
-        
+        System.out.println("Presione 1 para avanzar al menu");
+        UI.verification(1);
+        UI.UserMenu(user, defo);
 
+        
     }
 
 
     
     public static void printPlane(Flight flight) {
+        
         System.out.println();
         Passenger[][] passengers = flight.getPassengers();
         System.out.println("Vista de los asientos del vuelo");
@@ -419,7 +495,7 @@ public class UI {
                     System.out.print("  ");
                 }
                 if (passengers[i][j] == null) {
-                    System.out.print("O");
+                    System.out.print("_");
                 } else {
                     System.out.print("X");
                 }
@@ -430,6 +506,8 @@ public class UI {
         System.out.println("X=Ocupado");
 
     }
+    
+    
     
     public static void PassengersList(Administrator admin,int index){
         Passenger passengers[][]=admin.getAirline().getFlights().get(index).getPassengers();

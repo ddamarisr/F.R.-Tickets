@@ -5,9 +5,12 @@
  */
 package businessLogic;
 
+import customImplementations.Node;
+import customImplementations.PassengerAVL;
 import data.Flight;
 import data.Passenger;
 import data.Route;
+import data.Seat;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +32,33 @@ public class User {
         
         }
         return posFlights;
+    }
+    
+    public Passenger findReservations(Administrator admin,String id){ //retorna un objeto tipo pasajero que es lo mismo que una reservación
+        id=id.replace(" ", "");
+        int reservationNumber=Integer.valueOf(id);
+        PassengerAVL passengers=admin.getAirline().getPassengertree(); //cargamos el árbol de pasajeros. Buscar en un árbol es log(n)
+        Node passengerNode=passengers.Find(reservationNumber);
+        
+        if(passengerNode.getKey().getId()!=reservationNumber){
+            return null;
+        }
+        
+        return passengerNode.getKey();   
+    }
+    
+    public void changeSeats (Passenger p) throws IOException{ //retorna un objeto tipo pasajero que es lo mismo que una reservación
+           Seat newSeat=p.getFlight().checkAvailableSeats();
+           p.getFlight().getPassengers()[p.getSeat().getRow()][p.getSeat().getColumn()] = null; //liberar espacio del avion
+           p.setSeat(newSeat); //Cambiar el asiento asignado
+           p.getFlight().getPassengers()[p.getSeat().getRow()][p.getSeat().getColumn()] = p; //añadir al avión en la nueva posicion
+    }
+    
+    public void deleteReservation (Administrator admin,Passenger p) throws IOException{ //self-explanatory
+           Seat seat=p.getSeat(); //el asiento actual de la persona
+           p.getFlight().getPassengers()[seat.getRow()][seat.getColumn()] = null; //quitar de la matriz de pasajeros
+           PassengerAVL tree=admin.getAirline().getPassengertree();
+           tree.root=tree.deleteNode(tree.root, p); //quitar del arbol de pasajeros
     }
     
 }

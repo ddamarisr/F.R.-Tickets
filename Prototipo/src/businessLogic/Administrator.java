@@ -37,15 +37,8 @@ public class Administrator {
     
     
    
-    public void addFlight() throws IOException, ParseException{
-        
-        String origen=UI.recorder("la ciudad de origen");
-        String destination=UI.recorder("la ciudad de destino");
-        Route newRoute= new Route(origen,destination);
-        int number=Integer.parseInt(UI.recorder("el número de vuelo"));
-        Date date=sdf.parse(UI.recorder("La fecha del vuelo como dd/mm/aaaa"));
-        Flight newFlight=new Flight(newRoute, number, date, this.airline);
-        airline.getFlights().add(newFlight);
+    public void addFlight() throws IOException, ParseException{ 
+        this.airline.addFlight(this);
         UI.AdminMenu(this);
     }
     /*

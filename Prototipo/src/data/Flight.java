@@ -5,6 +5,9 @@
  */
 package data;
 
+import businessLogic.Administrator;
+import customImplementations.Node;
+import customImplementations.PassengerAVL;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -22,9 +25,9 @@ public class Flight implements Serializable {
     private Route route;
     private int numberOfFlight;
     private Date date;
-    private final Airline airline;
+    private Airline airline;
 
-    public Flight(Route route, int numberOfFlight, Date date, Airline airline) {
+    public Flight(Route route, int numberOfFlight, Date date, Airline airline,Administrator admin) {
         this.route=route;
         this.numberOfFlight = numberOfFlight;
         this.date=date;
@@ -36,43 +39,70 @@ public class Flight implements Serializable {
         return passengers;
     }
 
-    public Passenger addPassenger() throws IOException {
+    public Airline getAirline() {
+        return airline;
+    }
+    
+    
+
+    public Passenger addPassenger(Administrator admin) throws IOException {
 
         int id = Integer.valueOf(UI.recorder("su número de documento: "));
         String name = UI.recorder("su nombre: ");
         String email = UI.recorder("su e-mail: ");
         String tel = UI.recorder("su número de teléfono: ");
         UI.printPlane(this);
-        String seat = UI.recorder("su asiento escribiendo el número "
+
+        Passenger p = new Passenger();
+        
+        Seat passengerSeat=checkAvailableSeats();
+
+        p = new Passenger(id, name, email,tel,passengerSeat,this); //instanciarlo pero todavía no agregarlo
+        passengers[passengerSeat.getRow()][passengerSeat.getColumn()] = p; //añadir al avión
+        PassengerAVL passengertree=admin.getAirline().getPassengertree(); //cargamos el árbol de pasajeros.
+        passengertree.root=passengertree.insert(passengertree.root, p); //añadir al arbol de pasajeros
+      
+        return p;  
+    }
+    
+    
+    
+    public Seat checkAvailableSeats() throws IOException {   //método para verificar que un asiento seleccionado esté libre
+        UI.printPlane(this); //Muestre la acomodacion de este avion 
+       
+        String seat = UI.recorder("su nuevo asiento escribiendo el número "
                 + "y la letra correspondientes separados por un espacio:");
 
         boolean available = false;
-
-        Passenger p = new Passenger();
+        
+        int columnNumber=0;
+        int row=0;
+        int column=0;
 
         while (!available) {
             String seatCoord[] = seat.split(" ");
-            int row = Integer.valueOf(seatCoord[0]) - 1;
-            char column = seatCoord[1].charAt(0);
+            row = Integer.valueOf(seatCoord[0]) - 1;
+            column = seatCoord[1].charAt(0);
             column = Character.toLowerCase(column);
-            int columnNumber = (int)column - 97; //97 es el ASCII de letra minúscula a
-            
-            System.out.println(columnNumber);
+            columnNumber = (int)column - 97; //97 es el ASCII de letra minúscula a
 
             if (passengers[row][columnNumber] == null) {
-                Seat seatObject = new Seat(row, columnNumber);
-                p = new Passenger(id, name, email, seatObject); //instanciarlo pero todavía no agregarlo
-                passengers[row][columnNumber] = p; //añadir al avión
                 available = true; //se sale del while porque selecciono un asiento válido
+                Seat seatObject = new Seat(row, columnNumber);
+                return seatObject;
             } else {
-                seat = UI.recorder("otro asiento");
+                seat = UI.recorder("un asiento libre");
             }
 
         }
+        
+        Seat seatObject = new Seat(row, columnNumber);
+        return seatObject;
 
-        return p;
-
+          
     }
+    
+    
     
 
     public Route getRoute() {
@@ -86,10 +116,10 @@ public class Flight implements Serializable {
     public void setNumberOfFlight(int numberOfFlight) {
         this.numberOfFlight = numberOfFlight;
     }
+
+ 
     
-    public String getAirline() {
-        return airline.getName();
-    }
+    
     
     public String getDateFormat(){
     return Integer.toString(date.getDate())+"/"+Integer.toString(date.getMonth()+1)+"/"+Integer.toString(date.getYear());
@@ -124,7 +154,7 @@ public class Flight implements Serializable {
 
     @Override
     public String toString() {
-        return "Flight{" + "route=" + route + ", numberOfFlight=" + numberOfFlight + ", date=" + date + ", airline=" + airline + '}';
+        return "Flight{" + "route=" + route + ", numberOfFlight=" + numberOfFlight + ", date=" + date + ", airline=" + airline.getName() + '}';
     }
 
 

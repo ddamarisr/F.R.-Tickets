@@ -20,14 +20,17 @@ public class Passenger implements Serializable {
     private String mail;
     private String tel;
     private Seat seat;
+    private Flight flight;
     
     
     
-    public Passenger(int id, String name, String mail,Seat seat){
+    public Passenger(int id, String name, String mail,String tel,Seat seat,Flight flight){
         this.id = id;
         this.name = name;
         this.mail = mail;
         this.seat=seat;
+        this.tel=tel;
+        this.flight=flight;
     }
 
     public Passenger(int id, String name, String mail) {
@@ -56,10 +59,28 @@ public class Passenger implements Serializable {
         return tel;
     }
 
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setSeat(Seat seat) {
+        this.seat = seat;
+    }
+
+    public Seat getSeat() {
+        return seat;
+    }
+    
+    
+    
+    
+
     @Override
     public String toString() {
-        return "Passenger{" + "id=" + id + ", name=" + name + ", mail=" + mail + ", tel=" + tel + ", seat=" + seat + '}';
+        return "Passenger{" + "id=" + id + ", name=" + name + ", mail=" + mail + ", tel=" + tel + ", seat=" + seat +",flight="+flight.getNumberOfFlight()+ '}';
     }
+    
+    
     
     
     public String data(){
