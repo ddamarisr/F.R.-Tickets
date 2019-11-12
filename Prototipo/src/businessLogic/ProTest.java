@@ -39,19 +39,13 @@ public class ProTest {
             User user = new User();
             UI.UserMenu(user, defo);
         } else if (role.equals("Bench")) {
-            System.out.println("INSERTAR EN LA MITAD");
 
-            Bench.insertion(10000, "10_mil_datos.txt");
-            Bench.insertion(100000, "100_mil_datos.txt");
-            Bench.insertion(1000000, "1million.txt");
-
-            System.out.println();
-
-            System.out.println("ELIMINAR EN LA MITAD");
+            System.out.println("ELIMINAR");
 
             Bench.delete(10000, "10_mil_datos.txt");
             Bench.delete(100000, "100_mil_datos.txt");
             Bench.delete(1000000, "1million.txt");
+            Bench.delete(5000000, "5million.txt");
 
             System.out.println();
 
@@ -60,6 +54,15 @@ public class ProTest {
             Bench.append(10000, "10_mil_datos.txt");
             Bench.append(100000, "100_mil_datos.txt");
             Bench.append(1000000, "1million.txt");
+            Bench.append(5000000, "5million.txt");
+            
+            System.out.println("BUSCAR ");
+
+            Bench.find(10000, "10_mil_datos.txt");
+            Bench.find(100000, "100_mil_datos.txt");
+            Bench.find(1000000, "1million.txt");
+            Bench.find(5000000, "5million.txt");
+            System.out.println();
             
         }
     }

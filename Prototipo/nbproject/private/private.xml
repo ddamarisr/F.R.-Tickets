@@ -4,9 +4,19 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/ui/UI.java</file>
-            <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/businessLogic/ProTest.java</file>
-            <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/businessLogic/Bench.java</file>
+            <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/data/Passenger.java</file>
+            <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/businessLogic/DynamicArray.java</file>
+            <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/businessLogic/Administrator.java</file>
+            <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/customImplementations/PassengerAVL.java</file>
+            <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/data/Flight.java</file>
             <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/data/WriteAndRead.java</file>
+            <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/data/Airline.java</file>
+            <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/customImplementations/Node.java</file>
+            <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/businessLogic/ProTest.java</file>
+            <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/data/Seat.java</file>
+            <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/businessLogic/Bench.java</file>
+            <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/businessLogic/User.java</file>
+            <file>file:/C:/Users/danie/Desktop/DANIEL/Prototipo/src/data/Route.java</file>
         </group>
     </open-files>
 </project-private>
